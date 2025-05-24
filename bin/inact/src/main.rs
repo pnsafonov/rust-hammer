@@ -2,7 +2,7 @@ use std::env;
 use std::process;
 use std::process::exit;
 use log::{info, error};
-use libc::{getutxent, USER_PROCESS, printf};
+use libc::{getutxent, USER_PROCESS, DEAD_PROCESS, printf};
 
 fn main() {
     do_main();
@@ -135,7 +135,7 @@ fn do_job(ctx: &Context) {
             }
             i += 1;
 
-            if utp0.ut_type != USER_PROCESS {
+            if utp0.ut_type != USER_PROCESS && utp0.ut_type != DEAD_PROCESS {
                 continue
             }
             let utp_time = utp0.ut_tv.tv_sec as i32; // for freebsd
@@ -190,7 +190,7 @@ unsafe fn print_utmpx(utp0: &libc::utmpx, i: i32) {
     //     s2,
     // );
 
-    let c_str = std::ffi::CString::new("i = %d, ut_type = %d, tv_sec = %d, ut_id = %s, ut_pid = %d, ut_user = %s, ut_line = %s\n").unwrap();
+    let c_str = std::ffi::CString::new("i = %d, ut_type = %d, tv_sec = %d, ut_id = %s, ut_pid = %d, ut_user = %s, ut_line = %s, ut_host = %s\n").unwrap();
     printf(c_str.as_ptr(),
         i,
         utp0.ut_type as i32,
@@ -199,6 +199,7 @@ unsafe fn print_utmpx(utp0: &libc::utmpx, i: i32) {
         utp0.ut_pid,
         utp0.ut_user.as_ptr(),
         utp0.ut_line.as_ptr(),
+        utp0.ut_host.as_ptr(),
     );
 }
 
