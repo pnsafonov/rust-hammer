@@ -71,6 +71,6 @@ jobs:
         with:
           bin: inact
           target: ${{ matrix.target }}
-          tar: unix
+          tar: none
           zip: windows
           token: ${{ secrets.GITHUB_TOKEN }}
