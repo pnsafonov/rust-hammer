@@ -67,10 +67,3 @@ jobs:
           # (optional) Comma-separated list of additional files to be included to archive.
           # Note that glob pattern is not supported yet.
           # include: LICENSE,README.md
-      - uses: taiki-e/upload-rust-binary-action@v1
-        with:
-          bin: inact
-          target: ${{ matrix.target }}
-          tar: none
-          zip: windows
-          token: ${{ secrets.GITHUB_TOKEN }}
